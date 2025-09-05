@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>ПДА Сталкера</title>
+  <style>
+    body {
+      margin: 0;
+      background: #000;
+      font-family: "Consolas", monospace;
+      color: #00ff55;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    /* Экран взлома */
+    #hackScreen {
+      text-align: center;
+    }
+    #hackOutput {
+      text-align: left;
+      width: 600px;
+      height: 300px;
+      background: #050805;
+      border: 2px solid #0f0;
+      padding: 10px;
+      margin: 20px auto;
+      overflow-y: auto;
+      font-size: 14px;
+      white-space: pre-wrap;
+    }
+    button {
+      background: #050;
+      border: 2px solid #0f0;
+      color: #0f0;
+      font-size: 16px;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 6px;
+    }
+    button:hover {
+      background: #0a0;
+    }
+
+    /* Экран ПДА */
+    #pda {
+      display: none;
+      background: #101510;
+      border: 3px solid #2a3d2a;
+      border-radius: 15px;
+      box-shadow: 0 0 40px rgba(0, 255, 0, 0.3);
+      width: 800px;
+      padding: 20px;
+    }
+    .header {
+      border-bottom: 2px solid #2a3d2a;
+      padding-bottom: 10px;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+    .header h1 {
+      margin: 0;
+      font-size: 26px;
+      color: #9ef59e;
+    }
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      margin-bottom: 20px;
+    }
+    nav button {
+      font-size: 16px;
+      padding: 12px 20px;
+      margin: 5px;
+    }
+    nav button.active {
+      background: #264026;
+      color: #fff;
+    }
+    .tab {
+      display: none;
+    }
+    .tab.active {
+      display: block;
+    }
+    .section-title {
+      font-size: 18px;
+      margin: 15px 0 10px 0;
+      color: #a6fba6;
+      border-bottom: 1px solid #2a3d2a;
+      padding-bottom: 5px;
+    }
+    .log {
+      background: #0f1a0f;
+      border: 1px solid #2a3d2a;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 20px;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Экран взлома -->
+  <div id="hackScreen">
+    <h1>⚠ Доступ к ПДА ограничен ⚠</h1>
+    <button onclick="startHack()">Взломать ПДА</button>
+    <div id="hackOutput"></div>
+  </div>
+
+  <!-- Сам ПДА -->
+  <div id="pda">
+    <div class="header">
+      <h1>ПДА — личные записи</h1>
+    </div>
+    <nav>
+      <button class="active" onclick="openTab('rank')">Ранг</button>
+      <button onclick="openTab('actions')">Мои действия</button>
+      <button onclick="openTab('work')">Чем живу</button>
+      <button onclick="openTab('contacts')">Знакомые</button>
+      <button onclick="openTab('friends')">Друзья</button>
+      <button onclick="openTab('logs')">Записи</button>
+    </nav>
+
+    <div id="rank" class="tab active">
+      <div class="section-title">Ранг</div>
+      <div class="log">
+        Меня зовут Алексей, кличка «Крот».<br>
+        В Зоне я всего второй год. В рангах значусь как «новичок», 
+        но кровь мутантов видел, друзей хоронил, в аномалиях застревал — 
+        не чувствую себя зелёным. Жив, и это уже достижение.
+      </div>
+    </div>
+
+    <div id="actions" class="tab">
+      <div class="section-title">Мои действия</div>
+      <div class="log">
+        Здесь, в Зоне, каждый день решает, кто ты. Я не герой, но и не трус.  
+        Стараюсь держаться там, где меньше патрулей и больше шансов урвать артефакт.  
+        Часто выручал чужих — вытаскивал из аномалий, прикрывал от мутантов.  
+        Правда, тех, кто прикрывал меня — всё меньше.  
+        После той ночи в Церкви многое изменилось…
+      </div>
+    </div>
+
+    <div id="work" class="tab">
+      <div class="section-title">Чем живу</div>
+      <div class="log">
+        Промышляю артефактами. «Каменный цветок», «Медуза», иногда «Батарейка» —  
+        всё, что не сожгёт мне руки и не свалит в пыль.  
+        Торгую на базе у Сидоровича, иногда переправляю находки сталкерам побогаче.  
+        Живу скромно, иногда голодаю. Но Зона учит терпеть и ждать.
+      </div>
+    </div>
+
+    <div id="contacts" class="tab">
+      <div class="section-title">Знакомые</div>
+      <div class="log">
+        Валет — был старшим у костра. Хороший мужик, держал нас вместе.  
+        Мельник — бывший военный, помогал с патронами.  
+        Рыжий — мой проводник по тропам Кордона, знает Зону, как свои пять пальцев.  
+        Барыги — доверять нельзя, но без них никак.
+      </div>
+    </div>
+
+    <div id="friends" class="tab">
+      <div class="section-title">Друзья</div>
+      <div class="log">
+        Настоящие друзья в Зоне редкость.  
+        Были они у меня — сидели плечом к плечу в Церкви.  
+        Но та ночь всё изменила. Почти все легли под когтями мутантов.  
+        Жив только я и, кажется, Рыжий. Он для меня теперь единственный, 
+        кому я готов доверить спину.
+      </div>
+    </div>
+
+    <div id="logs" class="tab">
+      <div class="section-title">Записи</div>
+      <div class="log">
+        Сегодня сидели у костра в старой Церкви. Пламя плясало по лицам, 
+        а мысли у всех были тяжёлые. Валет сказал — нужно идти в подземку.  
+        Там, говорят, спрятаны записи. Никто толком не знает, что в них.  
+        Но раз он просит — значит важно. Я согласился.
+      </div>
+      <div class="log">
+        Ночью прорыв. Мутанты ворвались, и всё пошло к чертям.  
+        Я еле выбрался. Нога в крови, остальные… большинство не выбралось.  
+        Если кто-то найдёт этот ПДА — знай, спуститься в подземку можно только с паролем.  
+        Я его знаю, но чтобы он не попал в чужие руки — оставил подсказки в доме:  
+        <br><br>
+        Зелёный деревянный ящик — 1<br>
+        Телевизор — 3<br>
+        Коричневый квадратный ящик — 4<br>
+        Коричневый прямоугольный ящик — 2<br>
+        Синий металлический ящик — 7<br>
+        <br>
+        Порядок — догадаешься сам… если доживёшь.
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let hackLines = [
+      ">> Запуск протокола взлома...",
+      ">> Установка соединения...",
+      ">> Проверка защищённых секторов...",
+      ">> Получен ответ от ядра ПДА...",
+      ">> Обход шифрования...",
+      ">> Декодирование памяти...",
+      ">> Извлечение записей владельца...",
+      ">> Доступ предоставлен."
+    ];
+    let i = 0;
+    let interval;
+
+    function startHack() {
+      document.querySelector("button").style.display = "none";
+      interval = setInterval(() => {
+        if (i < hackLines.length) {
+          let out = document.getElementById("hackOutput");
+          out.innerHTML += hackLines[i] + "\n";
+          out.scrollTop = out.scrollHeight;
+          i++;
+        } else {
+          clearInterval(interval);
+          setTimeout(() => {
+            document.getElementById("hackScreen").style.display = "none";
+            document.getElementById("pda").style.display = "block";
+          }, 2000);
+        }
+      }, 15000); // каждые 15 секунд строка → итого около 2 минут
+    }
+
+    function openTab(id) {
+      document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+      document.querySelector(`nav button[onclick="openTab('${id}')"]`).classList.add('active');
+      document.getElementById(id).classList.add('active');
+    }
+  </script>
+</body>
+</html>
